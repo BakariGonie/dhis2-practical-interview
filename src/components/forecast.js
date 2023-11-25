@@ -1,69 +1,34 @@
+import moment from "moment";
 import React from "react";
-import {
-  List
-} from "@material-ui/core";
-import moment from 'moment';
-import './styles.css';
-import {
-  faCloud,
-  faBolt,
-  faCloudRain,
-  faCloudShowersHeavy,
-  faSnowflake,
-  faSun,
-  faSmog,
-} from '@fortawesome/free-solid-svg-icons';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-export default function Forecast(props, {weatherData}) {
+import { Card } from "semantic-ui-react";
 
-  const WeatherIcon = styled.div`
-  color: whitesmoke;
-`;
-
-  const { forecast } = props;
-
-  console.log("Forecast", forecast);
-
-  const results = forecast.map((item, index) => {
-
-    let weatherIcon = null;
-
-    if (item.description === 'Thunderstorm') {
-      weatherIcon = <FontAwesomeIcon icon={faBolt} />;
-    }else if (item.description === 'Drizzle') {
-      weatherIcon = <FontAwesomeIcon icon={faCloudRain} />;
-    } else if (item.description === 'Rain') {
-      weatherIcon = <FontAwesomeIcon icon={faCloudShowersHeavy} />;
-    } else if (item.description === 'Snow') {
-      weatherIcon = <FontAwesomeIcon icon={faSnowflake} />;
-    } else if (item.description === 'Clear') {
-      weatherIcon = <FontAwesomeIcon icon={faSun} />;
-    } else if (item.description === 'Clouds') {
-      weatherIcon = <FontAwesomeIcon icon={faCloud} />;
-    } else {
-      weatherIcon = <FontAwesomeIcon icon={faSmog} />;
-    }
-
-    return (
-      <div key={index} className="forecast">
-        <div className="flex-forecast">
-        <p>{moment(item.dt_txt).format("dddd")}</p>
-      
-        <WeatherIcon style={{fontSize:25,marginTop:4}}>{weatherIcon}</WeatherIcon>
-
-        <p>
-          {item.temperature} &deg;C
-        </p>
-        </div>
-      </div>
-    )
-  })
-  
-  return(
-    <div>
-      <List aria-label="forecast data">{results}</List>
+export default function Forecast({ forcast }) {
+  return (
+    <div style={{ marginTop: 20 }}>
+      <div className="forecast-main-header">Daily Forecast</div>
+      <Card.Group itemsPerRow={4}>
+        {forcast.map((data) => {
+          return (
+            <Card className="forecast-card">
+              <Card.Content>
+                <Card.Header className="forecast-date">
+                  Date: {moment.unix(data.dt).format("LL")}
+                </Card.Header>
+                <Card.Header className="forecast-header">
+                  Temprature: {Math.round((data.temp.max + data.temp.min) / 2)}{" "}
+                  ℃
+                </Card.Header>
+                <Card.Meta className="forecast-header">
+                  Humidity: {data.humidity} %
+                </Card.Meta>
+                <Card.Description className="temp-desc">
+                  Description: {data.weather[0].description}
+                </Card.Description>
+              </Card.Content>
+            </Card>
+          );
+        })}
+      </Card.Group>
     </div>
   );
-  
 }
