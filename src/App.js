@@ -5,7 +5,7 @@ import './App.css';
 import Forecast from './components/Forecast';
 import Header from './components/Header';
 import WeatherCard from './components/WeatherCard';
-
+//Initializing The Api url and Key
 const URL = `https://api.openweathermap.org/data/2.5/onecall`
 const API_KEY = `fd2ec02edf8f223e8e42391561f17978`
 
