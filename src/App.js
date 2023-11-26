@@ -1,64 +1,59 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Loader } from 'semantic-ui-react';
-import './App.css';
-import Forecast from './components/Forecast';
-import Header from './components/Header';
-import WeatherCard from './components/WeatherCard';
-//Initializing The Api url and Key
-const URL = `https://api.openweathermap.org/data/2.5/onecall`
-const API_KEY = `fd2ec02edf8f223e8e42391561f17978`
+import { useState } from "react";
+import "./App.css";
+
+const api = {
+  key: "fd2ec02edf8f223e8e42391561f17978",
+  base: "https://api.openweathermap.org/data/2.5/",
+};
 
 function App() {
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [city, setCity] = useState('');
-  const [temprature, setTemprature] = useState(null);
-  const [humidity, setHumidity] = useState(null);
-  const [sunrise, setSunrise] = useState(null);
-  const [sunset, setSunset] = useState(null);
-  const [icon, setIcon] = useState('');
-  const [forcast, setForecast] = useState([]);
-  const [loading, setloading] = useState(true);
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setLatitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
-    });
+  const [search, setSearch] = useState("");
+  const [weather, setWeather] = useState({});
 
-    axios.get(`${URL}?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&appid=${API_KEY}&units=metric`)
-      .then((weatherData) => {
-        setloading(false)
-        setTemprature(weatherData.data.current.temp);
-        setSunset(weatherData.data.current.sunset)
-        setSunrise(weatherData.data.current.sunrise)
-        setHumidity(weatherData.data.current.humidity)
-        setCity(weatherData.data.timezone)
-        setIcon(weatherData.data.current.weather[0].main)
-        setForecast(weatherData.data.daily)
-      })
-
-  }, [latitude, longitude])
+  /*
+    Search button is pressed. Make a fetch call to the Open Weather Map API.
+  */
+  const searchPressed = () => {
+    fetch(`${api.base}weather?q=${search}&units=metric&APPID=${api.key}`)
+      .then((res) => res.json())
+      .then((result) => {
+        setWeather(result);
+      });
+  };
 
   return (
-    <div className="main">
-      <Header />
-      {loading ? (
+    <div className="App">
+      <header className="App-header">
+        {/* HEADER  */}
+        <h1>DHIS2 Weather App</h1>
+
+        {/* Search Box - Input + Button  */}
         <div>
-          <p>Loading..Please Wait</p>
-          <Loader active inline='centered' />
+          <input
+            type="text"
+            placeholder="Enter city/town..."
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button onClick={searchPressed}>Search</button>
         </div>
-      ) : (
-        <WeatherCard
-          temprature={temprature}
-          humidity={humidity}
-          sunrise={sunrise}
-          sunset={sunset}
-          city={city}
-          icon={icon}
-        />
-      )}
-      <Forecast forcast={forcast} />
+
+        {/* If weather is not undefined display results from API */}
+        {typeof weather.main !== "undefined" ? (
+          <div>
+            {/* Location  */}
+            <p>{weather.name}</p>
+
+            {/* Temperature Celsius  */}
+            <p>{weather.main.temp}°C</p>
+
+            {/* Condition (Sunny ) */}
+            <p>{weather.weather[0].main}</p>
+            <p>({weather.weather[0].description})</p>
+          </div>
+        ) : (
+          ""
+        )}
+      </header>
     </div>
   );
 }

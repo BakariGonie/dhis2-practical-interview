@@ -1,5 +1,11 @@
-## Link: "https://github.com/BakariGonie/dhis2-practical-interview/"
+# DHIS Weather App in ReactJS
 
+Get API Here:
 
-## In order to run download the github repository then run npm install>npm start
+https://openweathermap.org
 
+## Commands:
+
+Run: `npm run start`
+
+Install deps: `npm install`
