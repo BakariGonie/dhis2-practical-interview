@@ -6,6 +6,7 @@ https://openweathermap.org
 
 ## Commands:
 
+Install deps: `npm install`
+
 Run: `npm run start`
 
-Install deps: `npm install`

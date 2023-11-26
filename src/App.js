@@ -40,15 +40,28 @@ function App() {
         {/* If weather is not undefined display results from API */}
         {typeof weather.main !== "undefined" ? (
           <div>
+            <div>
             {/* Location  */}
+            <label>City name:</label>
             <p>{weather.name}</p>
-
+            </div>
+            <div>
             {/* Temperature Celsius  */}
+            <label>Temperature info:</label>
             <p>{weather.main.temp}°C</p>
+            </div>
+            <div>
+            {/* Humidity */}
+            <label>Humidity Info:</label>
+            <p>{weather.main.humidity}</p>
+            </div>
 
+            <div>
             {/* Condition (Sunny ) */}
+            <label>Condition info:</label>
             <p>{weather.weather[0].main}</p>
             <p>({weather.weather[0].description})</p>
+            </div>
           </div>
         ) : (
           ""
